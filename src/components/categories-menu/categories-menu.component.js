@@ -34,7 +34,7 @@ function CategoriesMenu() {
   return (
     <div className="categories-container">
       {categories.map((item) => (
-        <CategoryItem category={item} />
+        <CategoryItem key={item.id} category={item} />
       ))}
     </div>
   );
