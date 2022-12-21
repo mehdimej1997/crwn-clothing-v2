@@ -1,38 +1,5 @@
-export const CART_ACTIONS_TYPE = {
-  ADD_CART_ITEM: "ADD_CART_ITEM",
-  REMOVE_CART_ITEM: "REMOVE_CART_ITEM",
-  CLEAR_CART_ITEMS: "CLEAR_CART_ITEMS",
-  TOGGLE_CART_ITEMS: "TOGGLE_CART_ITEMS",
-  TOTAL_CART_ITEMS: "TOTAL_CART_ITEMS",
-  COUNT_CART_ITEMS: "COUNT_CART_ITEMS",
-};
-
-export const cartReducer = (state, action) => {
-  const { type, payload } = action;
-
-  switch (type) {
-    case CART_ACTIONS_TYPE.ADD_CART_ITEM:
-      return { ...state, cartItems: addCartItem(state.cartItems, payload) };
-
-    case CART_ACTIONS_TYPE.REMOVE_CART_ITEM:
-      return { ...state, cartItems: removeCartItem(state.cartItems, payload) };
-
-    case CART_ACTIONS_TYPE.CLEAR_CART_ITEMS:
-      return { cartItems: clearCartItem(state.cartItems, payload) };
-
-    case CART_ACTIONS_TYPE.COUNT_CART_ITEMS:
-      return { ...state, cartCount: payload };
-
-    case CART_ACTIONS_TYPE.TOGGLE_CART_ITEMS:
-      return { ...state, isCartOpen: !state.isCartOpen };
-
-    case CART_ACTIONS_TYPE.TOTAL_CART_ITEMS:
-      return { ...state, cartTotal: payload };
-
-    default:
-      throw new Error(`Unhandled action type of ${type} in cartReducer`);
-  }
-};
+import { createAction } from "../../utils/reducer";
+import { CART_ACTIONS_TYPE } from "./cart.types";
 
 const addCartItem = (cartItems, productToAdd) => {
   const existingCartItem = cartItems.find(
@@ -71,3 +38,21 @@ const removeCartItem = (cartItems, cartItemToRemove) => {
 
 const clearCartItem = (cartItems, cartItemToClear) =>
   cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
+
+export const setIsCartOpen = (bool) =>
+  createAction(CART_ACTIONS_TYPE.SET_CART_IS_OPEN, bool);
+
+export const addItemToCart = (cartItems, productToAdd) => {
+  const newItems = addCartItem(cartItems, productToAdd);
+  return createAction(CART_ACTIONS_TYPE.SET_CART_ITEM, newItems);
+};
+
+export const removeCartFromItem = (cartItems, productToRemove) => {
+  const newItems = removeCartItem(cartItems, productToRemove);
+  return createAction(CART_ACTIONS_TYPE.SET_CART_ITEM, newItems);
+};
+
+export const clearCartItems = (cartItems, cartItemsToClear) => {
+  const newItems = clearCartItem(cartItems, cartItemsToClear);
+  return createAction(CART_ACTIONS_TYPE.SET_CART_ITEM, newItems);
+};
