@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "./root-reducer";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import thunk from "redux-thunk";
 // root-reducer
 
 // * OLD LOGIC USING REDUX
@@ -15,12 +16,14 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["user"],
+  blacklist: ["user", "categories"],
+  // whitelist: ["cart"]
 };
 
-const middleware = [process.env.NODE_ENV === "development" && logger].filter(
-  Boolean
-);
+const middleware = [
+  process.env.NODE_ENV === "development" && logger,
+  thunk,
+].filter(Boolean);
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 export const store = configureStore({
